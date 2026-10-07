@@ -1,0 +1,38 @@
+<h1 class="text-2xl font-bold mb-6">Dashboard</h1>
+
+<div class="grid gap-4 md:grid-cols-2">
+  <% @checks.each do |check| %>
+    <section class="rounded-lg border border-gray-200 bg-white p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-semibold"><%= check.name %></h2>
+        <%= status_badge(check.status) %>
+      </div>
+      <dl class="text-sm space-y-1">
+        <% check.details.each do |label, value| %>
+          <div class="flex gap-2"><dt class="text-gray-500 shrink-0"><%= label %>:</dt><dd class="break-all"><%= value %></dd></div>
+        <% end %>
+      </dl>
+    </section>
+  <% end %>
+
+  <section class="rounded-lg border border-gray-200 bg-white p-5">
+    <h2 class="font-semibold mb-3">This process</h2>
+    <dl class="text-sm space-y-1">
+      <div class="flex gap-2"><dt class="text-gray-500">Booted at:</dt><dd><%= utc_time(ProcessInfo.booted_at) %> (<%= time_ago_in_words(ProcessInfo.booted_at) %> ago)</dd></div>
+      <div class="flex gap-2"><dt class="text-gray-500">Current time:</dt><dd><%= utc_time(Time.current) %></dd></div>
+      <div class="flex gap-2"><dt class="text-gray-500">Hostname / PID:</dt><dd><%= ProcessInfo.hostname %> / <%= ProcessInfo.pid %></dd></div>
+      <div class="flex gap-2"><dt class="text-gray-500">Memory (RSS):</dt><dd><%= ProcessInfo.rss_mb %> MB</dd></div>
+      <div class="flex gap-2"><dt class="text-gray-500">Versions:</dt><dd>Ruby <%= RUBY_VERSION %>, Rails <%= Rails.version %>, <%= Rails.env %></dd></div>
+    </dl>
+  </section>
+</div>
+
+<h2 class="text-lg font-semibold mt-10 mb-3">Break it</h2>
+<ul class="text-sm list-disc pl-5 space-y-1">
+  <li><%= link_to "/boom", "/boom", class: "text-indigo-700 underline" %> raises an exception</li>
+  <li><%= link_to "/require-env", "/require-env", class: "text-indigo-700 underline" %> raises unless REQUIRED_SETTING is set</li>
+  <li><%= link_to "/slow?seconds=10", "/slow?seconds=10", class: "text-indigo-700 underline" %> sleeps N seconds</li>
+  <li><%= link_to "/memory?mb=200", "/memory?mb=200", class: "text-indigo-700 underline" %> allocates N MB</li>
+  <li><%= link_to "/sidekiq", "/sidekiq", class: "text-indigo-700 underline" %> Sidekiq web UI (needs SIDEKIQ_USERNAME and SIDEKIQ_PASSWORD)</li>
+  <li><%= link_to "/up", "/up", class: "text-indigo-700 underline" %> Rails health check</li>
+</ul>

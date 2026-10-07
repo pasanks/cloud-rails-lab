@@ -1,0 +1,16 @@
+<h1 class="text-2xl font-bold mb-6">Environment variables</h1>
+
+<div class="rounded-lg border border-gray-200 bg-white p-5 mb-6">
+  <p class="text-sm text-gray-500">GREETING</p>
+  <p class="text-xl"><%= @greeting.presence || "(GREETING is not set)" %></p>
+</div>
+
+<p class="text-sm text-gray-600 mb-3">Other variables are only reported as set or unset, never shown.</p>
+<table class="w-full text-sm bg-white border border-gray-200 rounded-lg">
+  <% @variables.each do |name, set| %>
+    <tr class="border-b border-gray-100 last:border-0">
+      <td class="px-4 py-2 font-mono"><%= name %></td>
+      <td class="px-4 py-2"><%= set ? status_badge(:ok, "SET") : status_badge(:missing, "UNSET") %></td>
+    </tr>
+  <% end %>
+</table>

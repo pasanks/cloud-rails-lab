@@ -1,0 +1,4 @@
+<h1 class="text-2xl font-bold mb-1">Secondary notes</h1>
+<p class="text-sm text-gray-600 mb-6">Stored in the secondary database (SECONDARY_DATABASE_URL), using the <strong><%= SecondaryNote.connection_db_config.adapter %></strong> adapter.</p>
+
+<%= render "shared/notes", notes: @notes, new_note: SecondaryNote.new %>

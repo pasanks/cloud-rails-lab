@@ -1,0 +1,31 @@
+<h1 class="text-2xl font-bold mb-1">Uploads</h1>
+<p class="text-sm text-gray-600 mb-6">
+  Active Storage service: <strong><%= @service_name %></strong>.
+  <% if Rails.env.production? && @service_name == "local" %>
+    <br><%= status_badge(:missing) %> No bucket attached: files go to the instance's local disk and disappear on the next deploy.
+  <% end %>
+</p>
+
+<%= form_with url: uploads_path, multipart: true, class: "rounded-lg border border-gray-200 bg-white p-5 mb-6 flex items-center gap-3" do |form| %>
+  <%= form.file_field :file, class: "text-sm" %>
+  <%= form.submit "Upload", class: "rounded bg-indigo-600 px-4 py-2 text-white font-medium hover:bg-indigo-500 cursor-pointer" %>
+<% end %>
+
+<% if @blobs.empty? %>
+  <p class="text-gray-500">No files yet.</p>
+<% else %>
+  <table class="w-full text-sm bg-white border border-gray-200 rounded-lg">
+    <tr class="text-left text-gray-500 border-b border-gray-200">
+      <th class="px-4 py-2">File</th><th class="px-4 py-2">Size</th><th class="px-4 py-2">Service</th><th class="px-4 py-2">Uploaded</th><th></th>
+    </tr>
+    <% @blobs.each do |blob| %>
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="px-4 py-2"><%= link_to blob.filename, rails_blob_path(blob, disposition: "attachment"), class: "text-indigo-700 underline" %></td>
+        <td class="px-4 py-2"><%= number_to_human_size(blob.byte_size) %></td>
+        <td class="px-4 py-2"><%= blob.service_name %></td>
+        <td class="px-4 py-2"><%= utc_time(blob.created_at) %></td>
+        <td class="px-4 py-2"><%= button_to "Delete", upload_path(blob), method: :delete, class: "text-red-600 hover:underline cursor-pointer" %></td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

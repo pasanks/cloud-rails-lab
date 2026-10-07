@@ -1,0 +1,31 @@
+<h1 class="text-2xl font-bold mb-1">Jobs</h1>
+<p class="text-sm text-gray-600 mb-6">
+  SlowJob runs in the Sidekiq background process. HeartbeatJob runs every minute via sidekiq-cron (<code>config/schedule.yml</code>).
+  <% if ENV["REDIS_URL"].blank? %><br><%= status_badge(:missing) %> REDIS_URL is not set, so enqueuing will fail.<% end %>
+</p>
+
+<%= form_with url: jobs_path, class: "flex items-center gap-3 mb-8" do |form| %>
+  <%= form.number_field :seconds, value: 5, min: 1, max: 60, class: "w-20 rounded border border-gray-300 px-3 py-2" %>
+  <span class="text-sm text-gray-600">seconds</span>
+  <%= form.submit "Enqueue SlowJob", class: "rounded bg-indigo-600 px-4 py-2 text-white font-medium hover:bg-indigo-500 cursor-pointer" %>
+<% end %>
+
+<h2 class="text-lg font-semibold mb-3">Recent job runs</h2>
+<% if @job_runs.empty? %>
+  <p class="text-gray-500">No job runs yet. Is the Sidekiq background process running?</p>
+<% else %>
+  <table class="w-full text-sm bg-white border border-gray-200 rounded-lg">
+    <tr class="text-left text-gray-500 border-b border-gray-200">
+      <th class="px-4 py-2">Finished</th><th class="px-4 py-2">Kind</th><th class="px-4 py-2">Message</th><th class="px-4 py-2">Duration</th><th class="px-4 py-2">Host</th>
+    </tr>
+    <% @job_runs.each do |run| %>
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="px-4 py-2"><%= utc_time(run.created_at) %></td>
+        <td class="px-4 py-2"><%= run.kind %></td>
+        <td class="px-4 py-2"><%= run.message %></td>
+        <td class="px-4 py-2"><%= run.duration_ms %> ms</td>
+        <td class="px-4 py-2 font-mono text-xs"><%= run.hostname %></td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

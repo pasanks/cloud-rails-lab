@@ -1,0 +1,5 @@
+# Sidekiq worker settings. Run with: bundle exec sidekiq -C config/sidekiq.yml
+# Keep concurrency <= the database pool (RAILS_MAX_THREADS) in config/database.yml.
+:concurrency: <%= ENV.fetch("RAILS_MAX_THREADS", 3) %>
+:queues:
+  - default

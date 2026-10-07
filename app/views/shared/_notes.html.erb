@@ -1,0 +1,23 @@
+<%# Shared by /notes (primary database) and /secondary_notes (secondary database). %>
+<%= form_with model: new_note, class: "rounded-lg border border-gray-200 bg-white p-5 mb-6 space-y-3" do |form| %>
+  <%= form.text_field :title, placeholder: "Title", required: true, class: "w-full rounded border border-gray-300 px-3 py-2" %>
+  <%= form.text_area :body, placeholder: "Body (optional)", rows: 2, class: "w-full rounded border border-gray-300 px-3 py-2" %>
+  <%= form.submit "Add note", class: "rounded bg-indigo-600 px-4 py-2 text-white font-medium hover:bg-indigo-500 cursor-pointer" %>
+<% end %>
+
+<% if notes.empty? %>
+  <p class="text-gray-500">No notes yet.</p>
+<% else %>
+  <ul class="space-y-3">
+    <% notes.each do |note| %>
+      <li class="rounded-lg border border-gray-200 bg-white p-4 flex justify-between gap-4">
+        <div>
+          <p class="font-medium"><%= note.title %></p>
+          <% if note.body.present? %><p class="text-sm text-gray-600 mt-1"><%= note.body %></p><% end %>
+          <p class="text-xs text-gray-400 mt-1"><%= utc_time(note.created_at) %></p>
+        </div>
+        <%= button_to "Delete", note, method: :delete, class: "text-sm text-red-600 hover:underline cursor-pointer" %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

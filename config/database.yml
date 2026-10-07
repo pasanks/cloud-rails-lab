@@ -1,0 +1,37 @@
+# Database configuration.
+#
+# Production: Laravel Cloud sets DATABASE_URL when you attach a database, using
+# a postgresql:// or mysql2:// URL. Rails merges it into the `production` block
+# below and picks the adapter from the URL scheme, so we deliberately do NOT set
+# `adapter` or `url` for production. The same code runs on Postgres or MySQL.
+#
+# Cloud reads this file's structure without evaluating ERB, and creates extra
+# databases for any `cache`, `queue` or `cable` connections it finds, so we
+# only define a single (primary) connection.
+#
+# The optional secondary database (SECONDARY_DATABASE_URL) is NOT configured
+# here. See app/models/secondary_record.rb.
+
+default: &default
+  # One connection per Puma thread / Sidekiq thread.
+  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  adapter: postgresql
+  encoding: unicode
+  database: cloud_rails_lab_development
+
+test:
+  <<: *default
+  adapter: postgresql
+  encoding: unicode
+  database: cloud_rails_lab_test
+
+production:
+  <<: *default
+  database: cloud_rails_lab_production
+  # Renders empty when DATABASE_URL is set, so the URL scheme picks the adapter.
+  # The fallback only exists so the app can boot (and show the database as
+  # "missing" on the dashboard) when no database is attached.
+  adapter: <%= "postgresql" if ENV["DATABASE_URL"].blank? %>

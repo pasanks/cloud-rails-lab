@@ -1,0 +1,23 @@
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>
+
+local:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+
+# Laravel Cloud object storage, exactly as in the Cloud Ruby deploy guide.
+# Private bucket: no `public: true` and no ACL options.
+#
+# The `if` guard is our only addition: Rails evaluates this whole file at boot,
+# and the guide's ENV.fetch calls raise KeyError when no bucket is attached.
+<% if ENV["AWS_BUCKET"].present? %>
+cloud:
+  service: S3
+  access_key_id: <%= ENV.fetch("AWS_ACCESS_KEY_ID") %>
+  secret_access_key: <%= ENV.fetch("AWS_SECRET_ACCESS_KEY") %>
+  region: <%= ENV.fetch("AWS_REGION", "auto") %>
+  bucket: <%= ENV.fetch("AWS_BUCKET") %>
+  endpoint: <%= ENV.fetch("AWS_ENDPOINT_URL") %>
+  force_path_style: false
+<% end %>

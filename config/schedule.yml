@@ -1,0 +1,8 @@
+# Cron jobs, loaded by sidekiq-cron when the Sidekiq process boots.
+# Laravel Cloud has no scheduler for Rails apps, so recurring tasks run here,
+# inside the Sidekiq background process. Format: https://github.com/sidekiq-cron/sidekiq-cron
+heartbeat:
+  cron: "* * * * *" # every minute
+  class: "HeartbeatJob"
+  queue: default
+  description: "Writes a JobRun row (kind: cron) every minute"
