@@ -29,15 +29,9 @@ test:
   database: cloud_rails_lab_test
 
 production:
-  primary:
-    <<: *default
-    database: cloud_rails_lab_production
-    # Renders empty when DATABASE_URL is set, so the URL scheme picks the adapter.
-    # The fallback only exists so the app can boot (and show the database as
-    # "missing" on the dashboard) when no database is attached.
-    adapter: <%= "postgresql" if ENV["DATABASE_URL"].blank? %>
-  # BREAK 12: a Solid Queue style connection, as in the Cloud Ruby guide.
-  queue:
-    <<: *default
-    database: cloud_rails_lab_production_queue
-    migrations_paths: db/queue_migrate
+  <<: *default
+  database: cloud_rails_lab_production
+  # Renders empty when DATABASE_URL is set, so the URL scheme picks the adapter.
+  # The fallback only exists so the app can boot (and show the database as
+  # "missing" on the dashboard) when no database is attached.
+  adapter: <%= "postgresql" if ENV["DATABASE_URL"].blank? %>
