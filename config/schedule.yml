@@ -2,7 +2,7 @@
 # Laravel Cloud has no scheduler for Rails apps, so recurring tasks run here,
 # inside the Sidekiq background process. Format: https://github.com/sidekiq-cron/sidekiq-cron
 heartbeat:
-  cron: "*/61 * * *" # BREAK 18: invalid (4 fields, minute 61)
+  cron: "* * * * *" # every minute
   class: "HeartbeatJob"
   queue: default
   description: "Writes a JobRun row (kind: cron) every minute"
