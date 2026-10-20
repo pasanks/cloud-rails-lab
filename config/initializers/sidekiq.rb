@@ -6,11 +6,11 @@ require "sidekiq/web"
 require "sidekiq/cron/web"
 
 Sidekiq.configure_server do |config|
-  config.redis = { url: ENV["REDIS_URL"] }
+  config.redis = { url: "redis://localhost:6379/0" } # BREAK 17: ignores REDIS_URL
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = { url: ENV["REDIS_URL"] }
+  config.redis = { url: "redis://localhost:6379/0" } # BREAK 17: ignores REDIS_URL
 end
 
 # The Sidekiq process loads cron jobs from this file when it boots.
