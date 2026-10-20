@@ -11,7 +11,7 @@ workers Integer(ENV.fetch("WEB_CONCURRENCY", "0"))
 
 # Cloud's startup probes connect over IPv6, so listen on [::] (all interfaces).
 # This must be the ONLY listener: no other `port` or `bind` lines.
-bind "tcp://0.0.0.0:#{ENV.fetch('PORT', '3000')}"
+bind "tcp://[::]:#{ENV.fetch('PORT', '3000')}"
 
 # Keep these shorter than the environment's graceful shutdown timeout,
 # so in-flight requests can finish after Cloud sends SIGTERM.
