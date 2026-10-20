@@ -24,12 +24,4 @@ class BreakItController < ApplicationController
     chunks = Array.new(megabytes) { "x" * 1.megabyte }
     render plain: "Allocated #{chunks.size} MB. Process memory (RSS) is now #{ProcessInfo.rss_mb} MB."
   end
-
-  # GET /pool-test - holds a database connection for 3 seconds with a slow query.
-  def pool_test
-    ActiveRecord::Base.with_connection do |connection|
-      connection.select_value(connection.adapter_name.match?(/mysql/i) ? "SELECT SLEEP(3)" : "SELECT pg_sleep(3)")
-    end
-    render plain: "Held a database connection for 3 seconds."
-  end
 end

@@ -31,8 +31,6 @@ test:
 production:
   <<: *default
   database: cloud_rails_lab_production
-  # BREAK 11: one connection for 3 Puma threads (and 3 Sidekiq threads).
-  max_connections: 1
   # Renders empty when DATABASE_URL is set, so the URL scheme picks the adapter.
   # The fallback only exists so the app can boot (and show the database as
   # "missing" on the dashboard) when no database is attached.
