@@ -28,7 +28,7 @@ Rails.application.configure do
   config.active_storage.service = ENV["AWS_BUCKET"].present? ? :cloud : :local
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-  config.assume_ssl = false # BREAK 14
+  config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
