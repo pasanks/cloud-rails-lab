@@ -8,7 +8,10 @@ local:
 
 # Laravel Cloud object storage, exactly as in the Cloud Ruby deploy guide.
 # Private bucket: no `public: true` and no ACL options.
-# BREAK 16: no guard, so a missing AWS_* variable raises KeyError at boot.
+#
+# The `if` guard is our only addition: Rails evaluates this whole file at boot,
+# and the guide's ENV.fetch calls raise KeyError when no bucket is attached.
+<% if ENV["AWS_BUCKET"].present? %>
 cloud:
   service: S3
   access_key_id: <%= ENV.fetch("AWS_ACCESS_KEY_ID") %>
@@ -17,3 +20,4 @@ cloud:
   bucket: <%= ENV.fetch("AWS_BUCKET") %>
   endpoint: <%= ENV.fetch("AWS_ENDPOINT_URL") %>
   force_path_style: false
+<% end %>
