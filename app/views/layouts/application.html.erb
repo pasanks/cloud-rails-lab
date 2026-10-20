@@ -28,7 +28,7 @@
       <div class="max-w-5xl mx-auto px-5 py-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
         <%= link_to "Cloud Rails Lab", root_path, class: "font-semibold text-base mr-3" %>
         <% { "Notes" => notes_path, "Secondary notes" => secondary_notes_path, "Env" => env_path,
-             "Cache" => cache_path, "Jobs" => jobs_path, "Uploads" => uploads_path, "Cable" => cable_test_path }.each do |label, path| %>
+             "Cache" => cache_path, "Jobs" => jobs_path, "Uploads" => uploads_path }.each do |label, path| %>
           <%= link_to label, path, class: current_page?(path) ? "font-semibold text-indigo-700" : "text-gray-600 hover:text-gray-900" %>
         <% end %>
       </div>
