@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get "require-env" => "break_it#require_env"
   get "slow" => "break_it#slow"
   get "memory" => "break_it#memory"
+  get "pool-test" => "break_it#pool_test"
 
   # Health check: 200 if the app boots without exceptions, 500 otherwise.
   # Can be used by load balancers and uptime monitors.
