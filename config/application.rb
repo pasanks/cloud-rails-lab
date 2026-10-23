@@ -50,5 +50,8 @@ module CloudRailsLab
     else
       :memory_store
     end
+
+    # Action Cable is mounted explicitly at /cable in config/routes.rb.
+    config.action_cable.mount_path = nil
   end
 end

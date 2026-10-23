@@ -1,0 +1,46 @@
+<h1 class="text-2xl font-bold mb-1">Action Cable</h1>
+<p class="text-sm text-gray-600 mb-6">
+  Opens a WebSocket to <code>/cable</code>, subscribes to <code>PingChannel</code> and echoes pings through the
+  <strong><%= ActionCable.server.config.pubsub_adapter.name.demodulize %></strong> adapter.
+  Browsers hide the handshake's HTTP status from JavaScript: if it never connects, check the WS request in the
+  browser's Network tab, or the app logs for <code>Failed to upgrade to WebSocket</code>.
+</p>
+
+<div class="flex items-center gap-3 mb-6">
+  <span id="cable-status" class="rounded px-2 py-0.5 text-xs font-semibold bg-gray-200 text-gray-700">CONNECTING</span>
+  <button id="ping-button" class="rounded bg-indigo-600 px-4 py-2 text-white font-medium hover:bg-indigo-500 cursor-pointer">Send ping</button>
+</div>
+
+<ol id="cable-log" class="text-sm font-mono space-y-1"></ol>
+
+<script type="module">
+  import { createConsumer, logger } from "@rails/actioncable"
+
+  logger.enabled = true // Action Cable's own messages in the browser console
+
+  const status = document.getElementById("cable-status")
+  const setStatus = (text, classes) => { status.textContent = text; status.className = `rounded px-2 py-0.5 text-xs font-semibold ${classes}` }
+  const log = (text) => {
+    const item = document.createElement("li")
+    item.textContent = `${new Date().toISOString().slice(11, 19)}  ${text}`
+    document.getElementById("cable-log").prepend(item)
+  }
+
+  const consumer = createConsumer()
+  log(`Connecting to ${consumer.url}`)
+
+  const subscription = consumer.subscriptions.create({ channel: "PingChannel", client_id: crypto.randomUUID() }, {
+    connected() { setStatus("CONNECTED", "bg-green-100 text-green-800"); log("Connected: the WebSocket upgrade worked") },
+    disconnected() { setStatus("DISCONNECTED", "bg-red-100 text-red-800"); log("Disconnected (Action Cable retries automatically)") },
+    rejected() { setStatus("REJECTED", "bg-red-100 text-red-800"); log("Subscription rejected by the server") },
+    received(data) { log(`Reply: "${data.message}" from ${data.hostname} at ${data.at}`) }
+  })
+
+  setTimeout(() => { if (!consumer.connection.isOpen()) log("Still not connected after 5s: check the Network tab (WS) and the app logs") }, 5000)
+
+  document.getElementById("ping-button").addEventListener("click", () => {
+    const message = `ping ${new Date().toISOString()}`
+    log(`Sent: "${message}"`)
+    subscription.perform("ping", { message })
+  })
+</script>

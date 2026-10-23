@@ -9,6 +9,11 @@ Rails.application.routes.draw do
   resources :jobs, only: %i[index create]
   resources :uploads, only: %i[index create destroy]
 
+  # Action Cable (WebSockets) and a page to test it. The page route comes first,
+  # because the /cable mount would otherwise also match /cable-test.
+  get "cable-test" => "cable_test#show"
+  mount ActionCable.server => "/cable"
+
   # Sidekiq web UI, behind HTTP basic auth (see config/initializers/sidekiq.rb).
   # Disabled unless both credentials are set.
   if ENV["SIDEKIQ_USERNAME"].present? && ENV["SIDEKIQ_PASSWORD"].present?

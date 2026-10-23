@@ -78,6 +78,13 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
 
+  # Browsers may only open Action Cable WebSockets from these origins:
+  # Cloud's *.laravel.cloud domains and the custom domain.
+  config.action_cable.allowed_request_origins = [
+    %r{\Ahttps://[a-z0-9.-]+\.laravel\.cloud\z},
+    "https://railsoncloud.pasankavinga.dev"
+  ]
+
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
   #   "example.com",     # Allow requests from example.com
