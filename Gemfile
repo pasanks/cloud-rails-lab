@@ -7,8 +7,6 @@ gem "propshaft"
 # Database adapters. Rails picks one from the DATABASE_URL scheme (postgresql:// or mysql2://)
 gem "pg", "~> 1.1"
 gem "mysql2", "~> 0.5"
-# Use the Puma web server [https://github.com/puma/puma]
-gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
@@ -56,6 +54,9 @@ group :development, :test do
 end
 
 group :development do
+  # BREAK 10: puma is not installed in production
+  gem "puma", ">= 5.0"
+
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 end
